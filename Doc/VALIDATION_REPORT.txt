@@ -1,0 +1,15 @@
+FINAL MANUSCRIPT VALIDATION
+===========================
+
+LaTeX source bytes: 141734
+Labels: 53; duplicate labels: 0
+Internal refs without matching labels: []
+Includegraphics targets: 7; missing: 0
+Input targets: 2; missing: 0
+Unfinished phrases 'To be produced': 0
+Unfinished phrases 'to be completed': 0
+Figure 5 placeholder: removed; seven-category taxonomy preserved in prose.
+Table 11 incomplete retrieved-document cells: removed; three cases preserved.
+Temporary bibliography-disabled LaTeX compile: successful (34 pages).
+Visual inspection performed on Figure 4, the revised qualitative table,
+the RCS scope table, and Section 12.4.

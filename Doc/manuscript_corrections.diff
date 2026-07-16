@@ -1,0 +1,756 @@
+--- Texte colle(232).txt
++++ legal_query_reformulation_corrected_final.tex
+@@ -391,12 +391,12 @@
+ low APR therefore signals a risk of anchor loss; it is not, by
+ itself, a guarantee that retrieval performance will deteriorate.
+  
+-The operational procedure for extracting anchors --- including
+-file-path tokens, rare capitalised identifiers and legislative
+-references --- is described in
+-Section~\ref{sec:anchor-extraction}. The current implementation
+-uses lexical proxy signals rather than a complete manually
+-validated anchor annotation.
++The operational procedure for extracting anchors is described in
++Section~\ref{sec:anchor-extraction}. The experiments use a manually
++audited conservative lexical anchor-preservation proxy rather than a
++complete anchor gold standard. The distinction between the formal APR
++concept and its conservative operational proxy is maintained throughout
++the empirical analysis.
+ \section{Research Questions}
+ This study is organised around five testable research questions
+ . Each question targets a distinct aspect of the 
+@@ -677,13 +677,15 @@
+ uses $\alpha = 1$, $\beta = 1$, $\gamma = 2$, $\text{min\_votes} 
+ = 2$. On LegalBench-RAG mini, the non-HyDE configuration uses 
+ $\alpha = 1$, $\beta = 1$, $\gamma = 1$, $\text{min\_votes} = 2$. 
+-The selected values and the current status of the sensitivity
+-analysis are discussed in
+-Section~\ref{sec:ablation-rcs-grid}. The LegalBench-RAG mini
+-sensitivity analysis remains incomplete, so RCS is interpreted as
+-a diagnostic rather than as an out-of-sample optimised method.
+-
+-\subsection{Extraction of anchors and calculation of the APR}
++The selected values and the scope of the sensitivity analysis are
++discussed in Section~\ref{sec:ablation-rcs-grid}. The BSARD grid was
++executed, whereas LegalBench-RAG mini was evaluated only with the
++reported fixed diagnostic configurations. Because no exhaustive
++LegalBench grid or independent validation/test selection was performed,
++RCS is interpreted as a diagnostic consensus analysis rather than as a
++hyperparameter-robust or out-of-sample optimised method.
++
++\subsection{Extraction of anchors and calculation of the anchor-preservation proxy}
+ \label{sec:anchor-extraction}
+ 
+ The APR equation was defined in Section~\ref{sec:problem-apr}. In the
+@@ -947,7 +949,7 @@
+ Proportion of relevant documents in the top 100 &
+ Broad coverage \\
+ MRR@10 &
+-Mutual rank of the first relevant document &
++Reciprocal rank of the first relevant document &
+ Quality of the top of the list \\
+ nDCG@10 &
+ Normalised cumulative gain at rank 10 &
+@@ -968,9 +970,9 @@
+ Worst 5\% loss &
+ Mean of the lower 5\% quantile &
+ Tail risk \\
+-APR &
+-Anchor retention in $\hat{q}$ &
+-Anchor loss diagnosis \\
++Anchor proxy &
++Retention of observable source cues in $\hat{q}$ &
++Anchor-loss diagnosis \\
+ \bottomrule
+ \end{tabular}%
+ }
+@@ -1821,26 +1823,23 @@
+ \section{Analysis of anchor loss (RQ3)}
+ \label{sec:anchor-loss}
+ 
+-This section addresses RQ3: does anchor loss
+-contribute to the severe performance degradation observed
+-during direct replacement in
+-document-centric legal retrieval? In the current version
+-of the experiments, we treat this question as a
+-diagnostic analysis. We do not yet claim
+-to have a complete and validated extraction of
+-documentary anchors. Instead, we use lexical signals
+-indicating anchor preservation, notably the
+-retention of informative tokens from the original
+-query, the retention of tokens from relevant
+-file paths, and the retention of rare
+-capitalised tokens.
+-
+-These diagnostics identify a recurring pattern: certain
+-reformulations retain the broad legal theme of the query but
+-remove the identifiers that distinguish the intended source.
+-This removal is particularly detrimental in LegalBench-RAG mini,
+-where several documents may contain legally similar clauses but
+-belong to different contracts, policies or transactions.
++This section addresses RQ3: does anchor loss contribute to the
++severe performance degradation observed during direct replacement in
++document-centric legal retrieval? We answer this question through a
++diagnostic analysis based on a manually audited conservative lexical
++anchor-preservation proxy, not through a complete APR gold standard.
++The proxy retains observable source cues that occur in the original
++query: tokens overlapping the resolved source path and tokens parsed
++from named parties, organisations, applications or products. Its
++construction and validation are reported in
++Section~\ref{sec:anchor-extraction}.
++
++The diagnostic identifies a recurring pattern: certain reformulations
++retain the broad legal theme of the query but remove the identifiers
++that distinguish the intended source. This removal is particularly
++detrimental in LegalBench-RAG mini, where several documents may contain
++legally similar clauses but belong to different contracts, policies or
++transactions.
+ 
+ The dense and hybrid experiments broaden the interpretation of
+ this pattern. GPT keyword and both HyDE-style replacements remain
+@@ -1883,11 +1882,10 @@
+ 
+ \begin{table}[h]
+ \centering
+-\caption{Examples of anchor preservation
+-diagnostics on LegalBench-RAG mini. The values
+-are derived from task-based analyses. These are
+-lexical proxies for anchor preservation, not
+-a complete manual annotation of the APR.}
++\caption{Examples from the final conservative anchor-preservation
++proxy on LegalBench-RAG mini. Retention values are means within the
++specified task and reformulation condition; retrieval columns report
++mean deltas relative to the original-query BM25 baseline.}
+ \label{tab:anchor-retention-diagnostic}
+ \resizebox{\columnwidth}{!}{%
+ \begin{tabular}{llcccc}
+@@ -1901,44 +1899,41 @@
+ \midrule
+ ContractNLI &
+ GPT keyword &
+-0.003 &
+-0.98 &
+-{--} &
++0.015 &
++0.96 &
++$-$0.423 &
+ $-$0.326 \\
+ MAUD &
+ GPT keyword &
+ 0.000 &
+ 1.00 &
+ $-$0.483 &
+-{--} \\
++$-$0.082 \\
+ MAUD &
+ DeepSeek keyword &
+-0.794 &
++0.957 &
+ 0.00 &
+ $+$0.035 &
+ $+$0.098 \\
+ MAUD &
+ GPT legal rewrite &
+-0.829 &
+-{--} &
+-{--} &
++1.000 &
++0.00 &
++$-$0.011 &
+ $+$0.030 \\
+ \bottomrule
+ \end{tabular}%
+ }
+ \end{table}
+ 
+-
+-This table does not yet constitute a comprehensive APR
+-measurement by model and by type of rewriting. It
+-does, however, show a clear trend: the configurations
+-that remove document anchors are precisely
+-those that result in the most significant performance
+-degradation on document-centric tasks. Conversely,
+-reformulations that retain source identifiers,
+-notably DeepSeek keyword and GPT legal rewrite
+-on MAUD, achieve better
+-ranking results.
++This descriptive table is not an exhaustive APR benchmark. It is
++consistent with the audited and query-clustered analysis in
++Section~\ref{sec:apr-correlation}: configurations that retain few
++observable source cues tend to produce larger losses in broad coverage,
++whereas DeepSeek keyword and GPT legal rewrite on MAUD preserve nearly
++all tracked cues and remain substantially more stable. The association
++is probabilistic rather than deterministic, and retained anchors do not
++guarantee that every added term is useful.
+ 
+ \subsection{Manually audited lexical anchor-preservation proxy}
+ \label{sec:apr-correlation}
+@@ -2014,139 +2009,114 @@
+ important component of a broader source-dilution process, not an exhaustive
+ causal explanation.
+ 
+-\subsection{Preliminary taxonomy of
+-degraded queries}
++\subsection{Qualitative coding framework for degraded queries}
+ \label{sec:taxonomy}
+-An examination of the most degraded queries under
+-GPT keyword and GPT HyDE replacement suggests several
+-recurring categories of errors. This taxonomy is
+-preliminary: it will need to be consolidated through
+-systematic manual annotation of harmed cases before
+-being used as a definitive frequency-based result.
++
++Inspection of strongly degraded GPT keyword and GPT HyDE cases suggests
++seven recurring mechanisms that can guide future document-level source
++audits:
+ \begin{enumerate}
+-    \item \textbf{Loss of party names}: the
+-    reformulation removes the names of the
+-    contracting parties, preventing BM25 from identifying
+-    the target contract.
+-    
+-\item \textbf{Loss of application or 
+-    service names}: the name of the product, service or
+-    application mentioned in the query disappears.
+-    \item \textbf{Loss of document identifier}:
+-    the reformulation removes a title, a file path,
+-    a transaction reference or a
+-    specific document identifier.
+-    
+-\item \textbf{HyDE pseudo-passage too generic}:
+-    the hypothetical passage is legally plausible
+-    but no longer contains an identifier traceable to
+-    the correct source.
+-    \item \textbf{Excessive abstraction}: the
+-    reformulation replaces specific terms with
++    \item \textbf{Loss of party names}: the reformulation removes the
++    names of the contracting parties, weakening identification of the
++    target contract.
++    \item \textbf{Loss of application or service names}: the product,
++    service or application named in the query disappears.
++    \item \textbf{Loss of document identifier}: a title, file-path cue,
++    transaction reference or other specific identifier is removed.
++    \item \textbf{HyDE pseudo-passage too generic}: the hypothetical
++    passage remains legally plausible but contains no identifier
++    traceable to the intended source.
++    \item \textbf{Excessive abstraction}: specific facts are replaced by
+     generic legal concepts.
+-    
+-\item \textbf{Good topic, wrong source}: the
+-    reformulation results in a clause
+-    that is thematically relevant but taken from a
+-    different document.
+-    \item \textbf{Lexical dilution}: the addition of
+-    numerous generated terms reduces the relative weight
+-    of the few anchor tokens still present.
++    \item \textbf{Good topic, potential wrong-source risk}: the
++    reformulation is thematically appropriate for a document class but
++    no longer distinguishes the intended member of that class.
++    \item \textbf{Lexical dilution}: numerous generated terms reduce the
++    relative contribution of the few source cues that remain.
+ \end{enumerate}
+-\begin{figure}[h]
+-\centering
+-\fbox{\parbox{0.9\columnwidth}{
+-\textbf{Figure~5 --- To be produced.}
+-Horizontal bar chart of anchor loss categories,
+-sorted by frequency among severely
+-degraded queries. This figure requires
+-manual or semi-automatic annotation of the harmed cases in order
+-to avoid presenting a qualitative taxonomy as
+-an unvalidated frequency measure.
+-}}
+-\caption{Proposed taxonomy of anchor loss types
+-among severely degraded queries on
+-LegalBench-RAG mini.}
+-\label{fig:taxonomy}
+-\end{figure}
+-This taxonomy is useful for guiding
+-qualitative analysis, but it should not yet be
+-interpreted as a definitive statistical
+-distribution of error causes.
+-\subsection{Qualitative cases of incorrect
+-source retrieval}
++
++These categories are reported as a qualitative coding framework, not as
++a frequency distribution. A horizontal frequency chart is deliberately
++omitted because the full set of harmed cases was not independently coded
++and no inter-annotator agreement was measured. This preserves the
++mechanistic observations without presenting unvalidated category counts
++as quantitative evidence.
++
++\subsection{Illustrative source-sensitivity cases}
+ \label{sec:qualitative-cases}
+-Table~\ref{tab:wrong-source} presents
+-qualitative cases representative of the anchor loss
+-mechanism. These examples must be supplemented using
+-the saved run files to indicate the
+-document actually retrieved at the wrong rank. In
+-this version, the table serves as a framework for
+-qualitative analysis rather than a fully
+-validated final result.
++
++Table~\ref{tab:wrong-source} preserves three illustrative cases used to
++explain the anchor-loss mechanism. The table analyses the query,
++reformulation and expected source identity; it does not claim that a
++specific alternative retrieved document has been manually verified.
++Direct document-level source attribution is reserved for future work.
++
+ \begin{table*}[t]
+ \centering
+-\caption{Qualitative cases of incorrect source retrieval
+-under replacement by LLM reformulation. The
+-retrieved documents will be supplemented from the saved
+-runs.}
++\caption{Illustrative source-sensitivity cases under LLM query
++replacement. These examples diagnose anchor behaviour and source-confusion
++risk; they are not presented as manually verified wrong-document
++retrieval events.}
+ \label{tab:wrong-source}
+ \small
+-\begin{tabular}{p{2.8cm}p{3.2cm}p{1.8cm}p{2cm}p{1.8cm}p{3.2cm}}
++\begin{tabular}{p{3.0cm}p{3.7cm}p{2.5cm}p{2.5cm}p{4.0cm}}
+ \toprule
+ \textbf{Original query} &
+ \textbf{Reformulation} &
+-\textbf{Anchor removed} &
+-\textbf{Expected doc.} &
+-\textbf{Document retrieved} &
+-\textbf{Why incorrect} \\
++\textbf{Anchor behaviour} &
++\textbf{Expected source} &
++\textbf{Diagnostic interpretation} \\
+ \midrule
+ NDA between DoiT and ICN; question on independent development
+ &
+-independent development, independently developed
+-information, similar information, Confidential
+-Information, Receiving Party, NDA exceptions &
+-DoiT; ICN &
+-NDA DoiT--ICN &
+-\textit{to be completed} &
+-The rephrasing preserves the theme of the clause but
+-removes the anchors from sections needed to
+-locate the correct NDA. \\
+-\midrule
+-Fiverr privacy policy; question regarding
+-the visibility of information &
++independent development, independently developed information,
++similar information, Confidential Information, Receiving Party,
++NDA exceptions
++&
++DoiT and ICN removed
++&
++NDA DoiT--ICN
++&
++The legal topic is preserved, but the party names needed to
++distinguish the intended NDA are removed, creating a clear
++source-confusion risk. \\
++\midrule
++Fiverr privacy policy; question regarding the visibility of information
++&
+ posted jobs visibility, job postings, public profile,
+-Fiverr privacy policy &
+-None or minimal &
+-Fiverr policy &
+-\textit{to be completed} &
+-The application anchor is retained in the
+-rewording, illustrating a case where
+-preserving a source identifier can limit
+-degradation. \\
+-\midrule
+-MAUD acquisition agreement involving The Michaels
+-Companies and Apollo &
+-closing condition, compliance with covenants,
+-acquisition agreement, material obligations &
+-Party names and document identifiers &
+-Michaels / Apollo agreement &
+-\textit{to be completed} &
+-A generic M\&A-type query
+-may retrieve a similar clause from a
+-different transaction if the party names
+-are omitted. \\
++Fiverr privacy policy
++&
++Fiverr retained
++&
++Fiverr policy
++&
++The application anchor remains present. This counterexample shows
++that reformulation is not harmful merely because it adds topical terms;
++retaining the source cue can limit source dilution. \\
++\midrule
++MAUD acquisition agreement involving The Michaels Companies and Apollo
++&
++closing condition, compliance with covenants, acquisition agreement,
++material obligations
++&
++Party names and transaction identifiers removed
++&
++Michaels--Apollo agreement
++&
++The reformulation becomes generic to many acquisition agreements.
++Without the transaction parties, a semantically similar clause from
++another transaction could be favoured. \\
+ \bottomrule
+ \end{tabular}
+ \end{table*}
+-These cases illustrate the difference between
+-thematic relevance and source accuracy. A reformulation
+-may remain legally consistent whilst removing
+-the terms that allow the evidence to be correctly
+-attributed to the right document. In a legal RAG system,
+-this distinction is essential: the retrieved passage
+-may appear relevant whilst originating
+-from an incorrect source.
++
++These cases clarify the distinction between thematic relevance and
++source accuracy. A reformulation may remain legally coherent while
++removing the information required to attribute evidence to the intended
++document. Because the actually retrieved alternative sources were not
++manually adjudicated in this study, the table supports a mechanism-level
++interpretation rather than a document-level error-rate claim.
++
+ \subsection{Summary of RQ3}
+ 
+ The results provide a positive but bounded answer to RQ3. The manually
+@@ -2182,19 +2152,13 @@
+ important and measurable component of source dilution in
+ document-centric legal retrieval, not as an exhaustive causal account.
+ 
+-% Continue here with your conclusion.
+ \section{Robustness and ablation studies}
+ \label{sec:robustness}
+-This section examines the robustness of the
+-main findings in the face of alternative design choices.
+-The ablation studies are organised according to their
+-current experimental status. Some are already covered by
+-the main results, others are partially
+-documented, and some remain to be carried out before a
+-full submission. We explicitly indicate these
+-statuses so as not to present as finalised
+-experiments that are still serving as planned
+-robustness checks.
++This section documents the robustness analyses completed in the
++present study and explicitly delimits comparisons that were not included.
++The distinction is important: unavailable counterfactual matrices or
++hyperparameter sweeps are treated as scope limitations, not as pending
++results embedded in the submitted evidence.
+ 
+ \subsection{RRF with versus without the original query}
+ \label{sec:ablation-original}
+@@ -2208,15 +2172,16 @@
+ where only the reformulation is used, with
+ original-preserving RRF merge, where the original query
+ remains present as a retrieval view.
+-\paragraph{Experimental status.}
+-This ablation is partially covered by the
+-main results. Direct replacement corresponds
+-to the case without the original, i.e. a retrieval
+-performed solely with $\hat{q}$. The one-view RRF
+-merge corresponds to the case with the original, i.e.
+-a merge between $q$ and $\hat{q}$. A more
+-comprehensive ablation, in which multi-view fusions would
+-also be compared with and without $q$, remains to be produced.
++\paragraph{Coverage in this study.}
++The matched single-reformulation comparison is fully covered:
++direct replacement uses only $\hat{q}$, whereas one-view RRF merges
++$q$ and the same $\hat{q}$. This provides a controlled
++with-versus-without-original comparison for the four reported
++reformulation conditions. A separate counterfactual matrix removing
++$q$ from every multi-view fusion was not evaluated; conclusions from
++this ablation are therefore restricted to the matched one-view setting
++and should not be read as a complete factorial decomposition of all
++multi-view configurations.
+ \paragraph{Result.}
+ On LegalBench-RAG mini, adding the original query
+ significantly reduces the performance degradation caused by
+@@ -2491,65 +2456,52 @@
+ which is the most robust outcome of this ablation for the
+ paper's overall conclusion.
+ 
+-\subsection{Sensitivity to RCS hyperparameters}
++\subsection{Scope of RCS hyperparameter evidence}
+ \label{sec:ablation-rcs-grid}
+-\paragraph{Motivation.}
+-RCS depends on several hyperparameters, notably
+-$\alpha$, $\beta$, $\gamma$ and
+-$\text{min\_votes}$. A sensitivity analysis is
+-necessary to verify that the observed gains do not
+-stem from an isolated setting chosen after
+-inspection of the results.
+-\paragraph{Experimental status.}
+-For BSARD, an RCS grid was run and
+-selected configurations were reported. For
+-LegalBench-RAG mini, the current RCS results should
+-be interpreted as diagnostic results on
+-a few selected configurations, and not as a
+-validated exhaustive grid. A complete
+-RCS sensitivity grid on LegalBench-RAG mini remains to
+-be produced.
++
++RCS depends on $\alpha$, $\beta$, $\gamma$ and
++$\text{min\_votes}$, so the strength of any algorithmic claim depends on
++the breadth and independence of hyperparameter evaluation. On BSARD, an
++RCS grid was executed and selected configurations are reported. On
++LegalBench-RAG mini, the study evaluates the fixed configurations shown
++in the main results, including the non-HyDE setting and the all-views
++control, but does not include an exhaustive grid or an independent
++validation/test split.
++
+ \begin{table}[h]
+ \centering
+-\caption{Status of RCS sensitivity analyses.}
++\caption{Scope of the RCS hyperparameter evidence reported in this study.}
+ \label{tab:rcs-grid-status}
+ \resizebox{\columnwidth}{!}{%
+-\begin{tabular}{lll}
++\begin{tabular}{p{2.6cm}p{4.2cm}p{4.5cm}}
+ \toprule
+ \textbf{Dataset} &
+-\textbf{Current status} &
+-\textbf{Interpretation} \\
++\textbf{Coverage in this study} &
++\textbf{Permitted interpretation} \\
+ \midrule
+ BSARD &
+-Grid executed, selected configurations
+-reported &
+-RCS results better substantiated \\
++Grid executed; selected configurations reported
++&
++Supportive diagnostic evidence across the evaluated grid \\
+ LegalBench-RAG mini &
+-Comprehensive grid to be produced &
+-RCS results interpreted as a diagnosis \\
++Fixed selected configurations and HyDE control; no exhaustive grid
++&
++Consensus signal is diagnostic; no claim of hyperparameter robustness
++or out-of-sample optimisation \\
+ \bottomrule
+ \end{tabular}%
+ }
+ \end{table}
+-\paragraph{On the \emph{training-free} status of RCS.}
+-RCS is described as a training-free method in the
+-sense that no parameters are learned via gradient descent and
+-no model is trained. This does not mean that
+-hyperparameters are not chosen. In the
+-current version, RCS parameters must therefore be
+-presented as diagnostic or exploratory choices
+-when no independent validation/test split has been
+-used.
+-\paragraph{Implication.}
+-The main contribution should not be formulated
+-as a new RCS method that is optimised and validated
+-out-of-sample. The role of RCS is more cautious:
+-to test whether consensus among reliable views provides a
+-useful signal for improving top-of-list
+-ranking. A comprehensive evaluation on LegalBench-RAG mini,
+-ideally with validation/test separation or at least
+-sensitivity analysis, remains to be produced to reinforce
+-this point.
++
++RCS is \emph{training-free} only in the sense that no model parameters
++are learned by gradient descent. Hyperparameters are still chosen.
++Accordingly, RCS is retained as a secondary diagnostic showing that
++agreement among reliable views can improve top-of-list ranking. The
++paper does not present it as a newly optimised, independently validated
++ranking method. A broader LegalBench sensitivity grid with a separate
++selection split is listed as future work rather than as evidence assumed
++by the current conclusions.
++
+ \subsection{Dense and hybrid baselines}
+ \label{sec:ablation-dense-hybrid}
+ \paragraph{Motivation.}
+@@ -2650,30 +2602,36 @@
+ 
+ \begin{table}[h]
+ \centering
+-\caption{Summary of ablation status.}
++\caption{Scope of robustness and ablation evidence in this study.}
+ \label{tab:ablation-status}
+ \resizebox{\columnwidth}{!}{%
+-\begin{tabular}{lll}
++\begin{tabular}{p{3.2cm}p{4.2cm}p{4.2cm}}
+ \toprule
+-\textbf{Ablation} &
+-\textbf{Status} &
+-\textbf{Priority before submission} \\
++\textbf{Analysis} &
++\textbf{Coverage in this study} &
++\textbf{Permitted interpretation} \\
+ \midrule
+ RRF with vs without original &
+-Partially covered &
+-Medium \\
++Completed for matched single-view comparisons; multi-view
++without-original matrix not evaluated
++&
++Supports the preservation principle within the matched comparison \\
+ HyDE vs non-HyDE in RCS &
+-Completed &
+-Low \\
++Completed
++&
++Supports selective inclusion of reformulation views \\
+ Filepath + chunk vs chunk-only &
+-Completed &
+-Low \\
++Completed
++&
++Separates indexing amplification from index-independent harm \\
+ RCS LegalBench sensitivity &
+-To be produced &
+-High \\
++Selected fixed configurations only; no exhaustive grid
++&
++Diagnostic consensus evidence, not hyperparameter robustness \\
+ Dense and hybrid &
+-Completed &
+-Low \\
++Completed for E5, BGE and $\lambda=0.5$
++&
++Cross-retriever robustness within the tested scope \\
+ \bottomrule
+ \end{tabular}%
+ }
+@@ -2682,10 +2640,10 @@
+ The robust conclusion is therefore broader than a BM25-only
+ claim: preserving the original query is supported across both
+ LegalBench indexing conditions and across the tested lexical,
+-dense and hybrid retriever families. The main remaining robustness
+-priority is a more comprehensive LegalBench RCS sensitivity
+-analysis; a broader hybrid-weight sweep would provide additional,
+-but not essential, evidence.
++dense and hybrid retriever families. A broader LegalBench RCS
++sensitivity analysis and a hybrid-weight sweep remain useful
++extensions; the current RCS and hybrid claims are explicitly
++bounded to the configurations evaluated here.
+ \section{Discussion and design implications}
+ \label{sec:discussion}
+ This section interprets the results from Sections~\ref{sec:main-results}, \ref{sec:anchor-loss} and \ref{sec:robustness} without introducing new experimental evidence. It is organised around four key messages: reformulation is not a guaranteed improvement, the original query should be preserved as an anchor, HyDE-style pseudo-passages can fail across lexical and semantic retrievers when source identity is diluted, and semantic relevance is insufficient when source accuracy is paramount.
+@@ -2751,7 +2709,18 @@
+ An important distinction runs through all our results: a passage may be semantically relevant while being incorrect as legal evidence. In document-centric tasks, several contracts, policies or transactions may contain similar clauses. A reformulation that preserves the legal theme but removes or dilutes the source identifier may therefore retrieve a plausible passage from the wrong document. The dense results make this distinction especially clear: high-capacity semantic matching does not prevent large losses when the reformulated representation becomes generic for the document class.
+ 
+ This distinction is central to legal RAG systems. The final generator typically sees only a small number of retrieved passages. If these passages come from the wrong source, the generated response may appear legally correct while being based on an erroneous attribution. The problem is therefore not merely thematic relevance; it is source accuracy under the indexed representation and retrieval architecture.
+-In this version of the study, we use lexical retention diagnostics of anchors to investigate this phenomenon. These diagnostics do not replace a full manual annotation of the anchors. However, they allow us to observe that certain reformulations systematically remove document identifiers, and that these removals are associated with the most significant performance degradation in LegalBench-RAG mini. A full APR metric, an overall correlation between APR and retrieval deltas, and a qualitative validation of the poor-quality sources retrieved still need to be produced to reinforce this analysis.
++The study investigates this phenomenon with a manually audited
++conservative lexical anchor-preservation proxy. On the deterministic
++40-query audit, the extractor recovered 100 of 149 manually identified
++tokens and introduced no spurious tokens in the reviewed sample. The
++query-clustered pooled analysis then shows a positive association with
++$\Delta$Recall@100 ($\rho=0.179$, 95\% CI $[0.116,0.242]$,
++$p_{\mathrm{Holm}}=0.0012$). This evidence strengthens the
++source-dilution diagnosis while remaining deliberately bounded: the proxy
++is incomplete under strict full-name annotation, and the study does not
++manually adjudicate the identity of every alternative document retrieved
++for harmed queries. Direct document-level source-attribution validation
++therefore remains an important extension, not a result assumed here.
+ \subsection{Operational implications}
+ \label{sec:disc-operational}
+ \paragraph{Cost of LLM calls.}
+@@ -2760,8 +2729,19 @@
+ \paragraph{Cost of merging.}
+ Unlike the generation of reformulations, RRF and RCS are inexpensive. Once the retrieval lists have been produced for each view, merging relies on simple operations over ranks or scores and requires neither retraining nor re-indexing. The main cost therefore lies in generating the views and executing one retrieval pass per view. In dense settings, document embedding is a substantial one-time cost that can be cached, while query encoding and RRF remain comparatively inexpensive.
+ \paragraph{Production monitoring.}
+-A production system could use simple anchor retention diagnostics to monitor the quality of reformulations prior to retrieval. In the current version of our work, these diagnostics are lexical proxies: retention of informative tokens, retention of tokens from relevant file paths, and retention of rare capitalised tokens. A future version could extend this monitoring with more comprehensive anchor extraction, including specialised rules, entity recognition and manual validation.
+-The operational benefit is clear: if a reformulation removes the main source identifiers present in the original query, it can be excluded from the fusion or given a lower weight. This mechanism does not guarantee final relevance, but it provides a cautionary signal even before the retrieval is executed.
++A production system could use an anchor-retention diagnostic to monitor
++reformulations before retrieval. The conservative proxy evaluated here
++combines exact overlap with source-path tokens and tokens parsed from
++named parties, organisations, applications and products, and its limits
++were manually audited on 40 queries. A deployment-oriented version
++should extend this high-precision signal with phrase-level matching,
++additional source-cue types and periodic human review.
++
++The operational benefit is clear: if a reformulation removes the main
++source identifiers present in the original query, it can be excluded
++from the fusion or assigned a lower weight. This mechanism does not
++guarantee final relevance, but it provides a cautionary signal before
++retrieval is executed.
+ \paragraph{Conservative design as a safety feature.}
+ In many information-seeking contexts, retaining the original query may seem like a minimal choice. In legal retrieval, however, it is a guarantee of security. The original query often contains the only available clues regarding the source the user is targeting. Removing it amounts to entrusting the reformulation model entirely with the responsibility of preserving legal traceability.
+ Our results therefore support a conservative design rule: reformulations may enhance retrieval, but they must not erase the original anchor. In a domain where the cost of missing or misattributed evidence is high, preserving the user query is not a limitation; it is a security feature.
+@@ -2914,24 +2894,24 @@
+ ensure strict reproducibility.
+ \subsection{Construction validity}
+ \paragraph{Reliability of anchor extraction.}
+-The diagnosis of anchor preservation currently relies
+-on lexical proxies: retention of
+-informative tokens from the original query, retention of
+-tokens from relevant file paths, and
+-retention of rare capitalised tokens. These signals
+-enable the detection of omissions of document identifiers
+-in rephrasings, but they do not
+-yet constitute a complete and
+-validated annotation of anchors in the strict sense.
+-This extraction may miss implicit, non-capitalised anchors,
+-such as specific descriptions of
+-clauses or documents, and it may also
+-over-identify certain capitalised tokens that are
+-not true anchors. Manual validation on a
+-sub-sample of queries, ideally with a measure
+-of inter-annotator agreement, remains to be carried out to
+-reinforce the validity of the APR construction as
+-a metric.
++A deterministic task-stratified sample of 40 queries, representing
++20\% of the 200 LegalBench-RAG mini queries, was manually audited
++(Section~\ref{sec:apr-correlation}). Under the strict criterion that
++every non-function component of a compound party or application name
++counts as an anchor, the conservative extractor recovered 100 of 149
++manual tokens (recall 0.671) and no spurious extracted token was observed
++in the reviewed sample (descriptive precision 1.000; F1 0.803). These
++figures describe the reviewed sample and should not be interpreted as a
++population-wide guarantee.
++
++The audit was conducted by a single manual reviewer, so no
++inter-annotator agreement statistic can be reported. The proxy also omits
++some corporate suffixes, generic components embedded in compound names,
++implicit non-capitalised descriptions, dates, amounts, section numbers
++and other source cues. Extending validation to the full query set, or to
++a second domain-expert annotator with formal agreement measurement,
++remains future work. The current evidence therefore supports a manually
++audited conservative lexical proxy, not a complete APR gold standard.
+ \paragraph{Construction of qrels via
+ span-to-chunk overlap.}
+ The relevance judgements of LegalBench-RAG mini are
+@@ -2948,7 +2928,7 @@
+ are located near chunk boundaries.
+ \paragraph{Coverage of anchor types.}
+ The anchor taxonomy used in this article covers
+-primarily part names, application names,
++primarily party names, application names,
+ document references, file paths and
+ rare identifiers. Other forms of document
+ anchoring, such as specific dates, amounts,
+@@ -2956,7 +2936,7 @@
+ are not systematically covered by
+ the current diagnostics. These forms of anchors could
+ constitute additional mechanisms of anchor loss
+-not measured in this version of the study.
++not measured in this study.
+ \subsection{Scope of the contribution}
+ \paragraph{Lack of downstream evaluation.}
+ This article evaluates the quality of retrieval, not
+@@ -2988,9 +2968,8 @@
+ lead to significant degradation across the tested lexical,
+ dense and hybrid configurations, and identifies anchor loss
+ and source dilution as plausible recurrent mechanisms in
+-document-centric retrieval. The anchor diagnosis itself
+-remains based on lexical proxies and should not be read as
+-complete causal proof.
++document-centric retrieval. The anchor diagnosis rests on a manually audited conservative lexical
++proxy and should not be read as complete causal proof.
+ 
+ This limited scope is deliberate. The aim is not to propose
+ a new general retriever, but to formulate and test a robust
+@@ -3028,7 +3007,7 @@
+ the tested hybrids in the canonical filepath+chunk setting.
+ These findings are consistent with source dilution and
+ information-need dilution, although the lexical proxy analysis
+-does not yet constitute exhaustive causal proof.
++does not constitute exhaustive causal proof.
+ 
+ Original-preserving fusion offers a simple and robust response.
+ On BSARD, preserving the original query reduces the significant

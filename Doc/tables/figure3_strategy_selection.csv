@@ -1,0 +1,41 @@
+dataset,strategy_key,strategy_label,metric,candidate_mean,ci95_low,ci95_high,marker
+bsard_test,baseline::bm25_original_test,BM25 original,Recall@10,0.3278160807766071,0.2747666851531983,0.3830178821379479,
+bsard_test,baseline::bm25_original_test,BM25 original,Recall@100,0.5671854569880885,0.5099837043340333,0.6234926084021478,
+bsard_test,baseline::bm25_original_test,BM25 original,MRR@10,0.2683773058773059,0.21969241562991562,0.3181919866294866,
+bsard_test,baseline::bm25_original_test,BM25 original,nDCG@10,0.24831114712513508,0.20634894077275895,0.2918143478937372,
+bsard_test,bm25_deepseek_keyword_expansion,Best replacement (DS keyword),Recall@10,0.3010074496916602,0.2505625216809427,0.3539141777628619,
+bsard_test,bm25_deepseek_keyword_expansion,Best replacement (DS keyword),Recall@100,0.618211453079874,0.5621949526637027,0.6723060135066714,
+bsard_test,bm25_deepseek_keyword_expansion,Best replacement (DS keyword),MRR@10,0.2812634062634062,0.231776017088517,0.3327479711854711,
+bsard_test,bm25_deepseek_keyword_expansion,Best replacement (DS keyword),nDCG@10,0.2427113332967976,0.2004956727334596,0.2860121907789112,
+bsard_test,rrf_original_deepseek_keyword_expansion,Best preserving RRF (DS keyword),Recall@10,0.3308119038382195,0.2775901083713583,0.3849876742557663,
+bsard_test,rrf_original_deepseek_keyword_expansion,Best preserving RRF (DS keyword),Recall@100,0.6365231730363309,0.5821371449414212,0.690632280969452,†
+bsard_test,rrf_original_deepseek_keyword_expansion,Best preserving RRF (DS keyword),MRR@10,0.2998623623623623,0.2475741366366366,0.3526960442585441,
+bsard_test,rrf_original_deepseek_keyword_expansion,Best preserving RRF (DS keyword),nDCG@10,0.2654516473973445,0.2212631439431043,0.3110888404843701,
+bsard_test,rcs_grid_deepseekplusgpt_a1_b1_g0_v2,Best selected RCS,Recall@10,0.345378281562492,0.2924209878239483,0.3997114299663641,
+bsard_test,rcs_grid_deepseekplusgpt_a1_b1_g0_v2,Best selected RCS,Recall@100,0.626617556551767,0.569385339928103,0.6837279926671375,†
+bsard_test,rcs_grid_deepseekplusgpt_a1_b1_g0_v2,Best selected RCS,MRR@10,0.3389586014586014,0.2835972132847132,0.3934879522379522,†
+bsard_test,rcs_grid_deepseekplusgpt_a1_b1_g0_v2,Best selected RCS,nDCG@10,0.2830003945100853,0.2390665562799361,0.3279374762500923,
+legalbench_mini,baseline::bm25_original_mini_canonical,BM25 original,Recall@10,0.2845688608776844,0.23918988095238097,0.3329957808123249,
+legalbench_mini,baseline::bm25_original_mini_canonical,BM25 original,Recall@100,0.7017942343604108,0.6555918329831932,0.7481555847338935,
+legalbench_mini,baseline::bm25_original_mini_canonical,BM25 original,MRR@10,0.21294841269841272,0.1721386408730159,0.25600520833333335,
+legalbench_mini,baseline::bm25_original_mini_canonical,BM25 original,nDCG@10,0.1931216213080519,0.15983721380118857,0.2288118027401736,
+legalbench_mini,bm25_gpt_legal_rewrite,Best BM25 replacement (GPT legal),Recall@10,0.3188664799253035,0.2704972572362278,0.369333630952381,
+legalbench_mini,bm25_gpt_legal_rewrite,Best BM25 replacement (GPT legal),Recall@100,0.6833448879551821,0.6348072916666666,0.7314341824229692,
+legalbench_mini,bm25_gpt_legal_rewrite,Best BM25 replacement (GPT legal),MRR@10,0.2438234126984127,0.1998373015873016,0.2903878472222222,
+legalbench_mini,bm25_gpt_legal_rewrite,Best BM25 replacement (GPT legal),nDCG@10,0.2231029231247061,0.1859175117747253,0.260202781664808,
+legalbench_mini,rrf_original_deepseek_keyword_gpt_legal_mini,Best BM25 RRF,Recall@10,0.3693307656395891,0.3183952614379084,0.4205216386554621,†
+legalbench_mini,rrf_original_deepseek_keyword_gpt_legal_mini,Best BM25 RRF,Recall@100,0.7533626283846873,0.7083308327497666,0.7967581232492997,†
+legalbench_mini,rrf_original_deepseek_keyword_gpt_legal_mini,Best BM25 RRF,MRR@10,0.2649404761904762,0.2212512896825396,0.3109986607142857,†
+legalbench_mini,rrf_original_deepseek_keyword_gpt_legal_mini,Best BM25 RRF,nDCG@10,0.2553268837876872,0.2180869051392416,0.2937929170212578,†
+legalbench_mini,rcs_original_deepseek_legal_keyword_gpt_legal_mini,Best BM25 RCS,Recall@10,0.3684140989729225,0.3181902135854341,0.4195143615779645,†
+legalbench_mini,rcs_original_deepseek_legal_keyword_gpt_legal_mini,Best BM25 RCS,Recall@100,0.7478070728291317,0.7018084208683474,0.7919713672969187,†
+legalbench_mini,rcs_original_deepseek_legal_keyword_gpt_legal_mini,Best BM25 RCS,MRR@10,0.2595575396825397,0.2159383928571428,0.3051649305555555,
+legalbench_mini,rcs_original_deepseek_legal_keyword_gpt_legal_mini,Best BM25 RCS,nDCG@10,0.2513578741248002,0.2134416116120614,0.2895773878546341,†
+legalbench_mini,dense_e5_filepath_chunk_original,Dense E5 original,Recall@10,0.4965351307189543,0.4420765143557423,0.5515283088235294,
+legalbench_mini,dense_e5_filepath_chunk_original,Dense E5 original,Recall@100,0.8472380952380953,0.8105827380952381,0.8819300595238094,
+legalbench_mini,dense_e5_filepath_chunk_original,Dense E5 original,MRR@10,0.3920396825396824,0.339243005952381,0.4462625496031746,
+legalbench_mini,dense_e5_filepath_chunk_original,Dense E5 original,nDCG@10,0.3617241781802576,0.3203966413705236,0.4046611804967437,
+legalbench_mini,hybrid_rrf_bge_filepath_chunk_dw0p5_original_deepseek_keyword_gpt_legal,Hybrid BGE preserving RRF,Recall@10,0.4198029878618113,0.3678232084500467,0.4715777544351074,†
+legalbench_mini,hybrid_rrf_bge_filepath_chunk_dw0p5_original_deepseek_keyword_gpt_legal,Hybrid BGE preserving RRF,Recall@100,0.7882361111111112,0.7428604166666666,0.8299451388888888,†
+legalbench_mini,hybrid_rrf_bge_filepath_chunk_dw0p5_original_deepseek_keyword_gpt_legal,Hybrid BGE preserving RRF,MRR@10,0.2809980158730158,0.2345053571428571,0.3282556051587301,
+legalbench_mini,hybrid_rrf_bge_filepath_chunk_dw0p5_original_deepseek_keyword_gpt_legal,Hybrid BGE preserving RRF,nDCG@10,0.2765137208820373,0.2376863089171029,0.3167350573672078,†

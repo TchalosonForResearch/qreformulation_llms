@@ -1,0 +1,5 @@
+task,queries,exact_matches,manual_tokens,recovered_tokens,missing_tokens,spurious_tokens,exact_match_rate,token_recall
+contractnli,10,9,17,16,1,0,0.9,0.9411764705882353
+cuad,10,0,58,36,22,0,0.0,0.6206896551724138
+maud,10,0,57,38,19,0,0.0,0.6666666666666666
+privacy_qa,10,7,17,10,7,0,0.7,0.5882352941176471

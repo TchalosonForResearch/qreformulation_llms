@@ -1,0 +1,21 @@
+PHASE 2B MANUAL VALIDATION REPORT
+=================================
+
+Reviewed queries: 40
+Exact full-component matches: 16/40 (40.0%)
+Manual anchor tokens: 149
+Recovered manual tokens: 100
+Missing manual tokens: 49
+Spurious extracted tokens: 0
+Token precision: 1.000
+Token recall: 0.671
+Token F1: 0.803
+
+TASK BREAKDOWN
+- contractnli: exact=9/10; token recall=0.941; spurious=0
+- cuad: exact=0/10; token recall=0.621; spurious=0
+- maud: exact=0/10; token recall=0.667; spurious=0
+- privacy_qa: exact=7/10; token recall=0.588; spurious=0
+
+INTERPRETATION
+The v3 extractor is conservative: no spurious tokens were identified in the reviewed sample, but it omits many legal-form words and generic components of compound party/application names. Therefore it should be described as a manually audited conservative lexical anchor-preservation proxy, not as a fully validated APR annotation.
