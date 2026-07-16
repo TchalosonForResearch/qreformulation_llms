@@ -1,0 +1,13 @@
+rho_within_stratum,ci95_low_cluster_bootstrap,ci95_high_cluster_bootstrap,p_cluster_permutation,num_unique_queries,num_reformulation_rows,bootstrap_iterations,permutation_iterations,cluster_unit,strata,retention_signal,metric_delta,p_holm_12,significant_holm_0.05
+-0.04165134193123581,-0.11867740855438527,0.03480891430946569,0.25447455254474555,200,1200,10000,10000,query_id within task,generator × query_type × task,combined_anchor_retention_v2,delta_Recall@10,1.0,False
+0.11248111957814841,0.042839944329633915,0.18124107593798403,0.0011998800119988001,200,1200,10000,10000,query_id within task,generator × query_type × task,combined_anchor_retention_v2,delta_Recall@100,0.0131986801319868,True
+-0.02061830062855127,-0.09178048928921129,0.0467767107602012,0.5564443555644436,200,1200,10000,10000,query_id within task,generator × query_type × task,combined_anchor_retention_v2,delta_MRR@10,1.0,False
+-0.030372745900179042,-0.10517225075966571,0.04268543956670253,0.39376062393760625,200,1200,10000,10000,query_id within task,generator × query_type × task,combined_anchor_retention_v2,delta_nDCG@10,1.0,False
+-0.02128161718781156,-0.09879962332214125,0.05557896602691072,0.5597440255974403,194,1164,10000,10000,query_id within task,generator × query_type × task,path_anchor_retention_v2,delta_Recall@10,1.0,False
+0.09869310317250794,0.023204639927160507,0.17396808440434736,0.0066993300669933005,194,1164,10000,10000,query_id within task,generator × query_type × task,path_anchor_retention_v2,delta_Recall@100,0.066993300669933,False
+0.029098388554696892,-0.04355331400004314,0.0978469124067107,0.41575842415758424,194,1164,10000,10000,query_id within task,generator × query_type × task,path_anchor_retention_v2,delta_MRR@10,1.0,False
+0.0035359598470676686,-0.06512751902839316,0.0731126432117876,0.9163083691630837,194,1164,10000,10000,query_id within task,generator × query_type × task,path_anchor_retention_v2,delta_nDCG@10,1.0,False
+0.013179027563154994,-0.053994503798502,0.0810590403286244,0.6928307169283072,200,1200,10000,10000,query_id within task,generator × query_type × task,entity_anchor_retention_v2,delta_Recall@10,1.0,False
+0.14146688502353894,0.08076998474063588,0.201229063821696,9.999000099990002e-05,200,1200,10000,10000,query_id within task,generator × query_type × task,entity_anchor_retention_v2,delta_Recall@100,0.0011998800119988001,True
+0.01999566576652355,-0.047326305698942604,0.08645213394994163,0.5507449255074492,200,1200,10000,10000,query_id within task,generator × query_type × task,entity_anchor_retention_v2,delta_MRR@10,1.0,False
+0.01863444181865213,-0.05354203582838388,0.0890271991208551,0.5876412358764124,200,1200,10000,10000,query_id within task,generator × query_type × task,entity_anchor_retention_v2,delta_nDCG@10,1.0,False

@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{Query-clustered association between anchor-preservation proxies
+and $\Delta$Recall@100 on LegalBench-RAG mini. Correlations are computed
+after ranking and centring within generator $\times$ reformulation type
+$\times$ task strata. Confidence intervals use query-cluster bootstrap;
+$p$-values use query-cluster permutation and Holm correction across the
+12 pooled proxy--metric tests.}
+\label{tab:anchor-proxy-correlation}
+\begin{tabular}{lccc}
+\toprule
+Proxy & $\rho$ & 95\% CI & $p_{\mathrm{Holm}}$ \\
+\midrule
+Combined & 0.179 & [0.116, 0.242] & 0.0012 \\
+File-path overlap & 0.197 & [0.123, 0.268] & 0.0012 \\
+Entity/name & 0.191 & [0.134, 0.249] & 0.0012 \\
+\bottomrule
+\end{tabular}
+\end{table}
